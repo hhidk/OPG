@@ -141,7 +141,7 @@ public class Main {
     public static void main(String[] args) throws IOException {
         initGrammar();
         initStack();
-        filePath = "E:\\Documents\\JavaProject\\OPG\\src\\test.txt";
+        filePath = args[0];
         br=new BufferedReader(new InputStreamReader
                 (new FileInputStream(filePath),"UTF-8"));
         input = br.readLine();

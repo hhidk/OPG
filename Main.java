@@ -1,5 +1,3 @@
-import javafx.util.Pair;
-
 import java.io.BufferedReader;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -15,7 +13,6 @@ public class Main {
                             {1, 1, 1, 1, 3, 2},
                             {2, 2, 0, 0, 2, 2},
                             {1, 1, 1, 1, 0, 0}};
-    static Map<Object, Character> tsymbolTable = new HashMap<>();
     static List<String> grammarList = new ArrayList<String>();
     static Stack<Character> stack = new Stack<>();
     static Stack<Character> tStack = new Stack<>();
@@ -23,15 +20,6 @@ public class Main {
     static String filePath;
     static BufferedReader br;
     static String input;
-
-    public static void initSymbolTable() {
-        for(int i=0; i<6; i++){
-            for(int j=0; j<6; j++){
-                Pair<Character, Character> pair = new Pair<>(tsymbol[i], tsymbol[j]);
-                tsymbolTable.put(pair, priority[table[i][j]]);
-            }
-        }
-    }
 
     public static void initGrammar() {
         grammarList.add("N+N");
@@ -51,7 +39,7 @@ public class Main {
         for(int i=0; i<length; i++){
             cur = string.charAt(i);
             prev = tStack.peek();
-            opt = tsymbolTable.get(new Pair<>(prev, cur));
+            opt = getOpt(prev, cur);
             if(i==length-1 && stack.peek()=='N' && stack.size() == 2)
                 return;
             switch(opt){
@@ -94,11 +82,66 @@ public class Main {
             return true;
     }
 
+    public static char getOpt(char prev, char cur){
+        int iprev=0, jcur=0;
+        switch(prev){
+            case '+':
+                iprev = 0;
+                break;
+            case '*':
+                iprev = 1;
+                break;
+            case 'i':
+                iprev = 2;
+                break;
+            case '(':
+                iprev = 3;
+                break;
+            case ')':
+                iprev = 4;
+                break;
+            case '#':
+                iprev = 5;
+                break;
+        }
+        switch(cur){
+            case '+':
+                jcur = 0;
+                break;
+            case '*':
+                jcur = 1;
+                break;
+            case 'i':
+                jcur = 2;
+                break;
+            case '(':
+                jcur = 3;
+                break;
+            case ')':
+                jcur = 4;
+                break;
+            case '#':
+                jcur = 5;
+                break;
+        }
+        switch(table[iprev][jcur]){
+            case 0:
+                return ' ';
+            case 1:
+                return '<';
+            case 2:
+                return '>';
+            case 3:
+                return '=';
+            default:
+                return ' ';
+        }
+    }
+
     public static void main(String[] args) throws IOException {
-        initSymbolTable();
         initGrammar();
         initStack();
-        filePath = args[0];
+        filePath = "E:\\Documents\\JavaProject\\OPG\\src\\test.txt";
         br=new BufferedReader(new InputStreamReader
                 (new FileInputStream(filePath),"UTF-8"));
         input = br.readLine();

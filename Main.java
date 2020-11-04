@@ -103,6 +103,8 @@ public class Main {
             case '#':
                 iprev = 5;
                 break;
+            default:
+                return ' ';
         }
         switch(cur){
             case '+':
@@ -123,6 +125,8 @@ public class Main {
             case '#':
                 jcur = 5;
                 break;
+            default:
+                return  ' ';
         }
         switch(table[iprev][jcur]){
             case 0:
